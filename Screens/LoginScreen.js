@@ -9,7 +9,9 @@ import {
   Platform,
   Alert,
   Button,
-  Text
+  Text,
+  TouchableOpacity,
+
 } from "react-native";
 
 export default function LoginScreen() {
@@ -24,9 +26,12 @@ export default function LoginScreen() {
     console.log("email:", email && "password:", password)
   };
 
+  //const image = { uri: "https://docs.expo.dev/static/images/tutorial/splash.png" };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      
       <View style={styles.container}>
+      
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
@@ -44,10 +49,18 @@ export default function LoginScreen() {
             secureTextEntry={true}
             style={styles.input}
           />
-          <Button title={"Увійти"} style={styles.button} onPress={onLogin} />
-          <Button title={"Нема аккаунта? Зареєструватись"} style={styles.link} onPress={onLogin} />
+          
+          <Text style={styles.showPassw}>Показати</Text>
+          
+<TouchableOpacity style={styles.button} onPress={onLogin}>
+        <Text style={styles.text}>Увійти</Text>
+      </TouchableOpacity>
+          {/* <Button title={"Увійти"} color="#FF6C00" style={styles.button} onPress={onLogin} /> */}
+          <Text style={styles.link}>Немає аккаунта? Зареєструватись</Text>
         </KeyboardAvoidingView>
+        
       </View>
+     
     </TouchableWithoutFeedback>
   );
 }
@@ -57,8 +70,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-end",
-     //backgroundColor: "#ecf0f1",
-    marginBottom: 140,
+    backgroundColor: "#ecf0f1",
+    
   },
   title: {
 
@@ -79,5 +92,34 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#FF6C00",
+    height: 51,
+    borderRadius: 100,
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  link: {
+    fontSize: 16,
+    weight: 400,
+    marginBottom: 92,
+    marginTop: 16,
+    textAlign: "center",
+    color:" #1B4371",
+  },
+  text: {
+
+    color: "#FFFFFF",
+    fontSize: 16,
+    textAlign: "center",
+    padding: 16,
+
+  },
+  showPassw: {
+    position: "absolute",
+    left: 263,
+    top: 148,
+
   },
 });
