@@ -11,6 +11,7 @@ import {
   Button,
   Text,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 
 const LoginScreen = ({ navigation }) => {
@@ -30,61 +31,79 @@ const LoginScreen = ({ navigation }) => {
     console.log("email:", email && "password:", password);
   };
 
-  // const changeBorderColor = () =>{
-  //   setColor(activeColor);
-  // }
-
-  // const reverseChangeColor = () => {
-  //   setColor(firstColor);
-  // }
-
-  //const image = { uri: "https://docs.expo.dev/static/images/tutorial/splash.png" };
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <ImageBackground
+      source={require("../img/PhotoBG.jpg")}
+      style={styles.backImg}
+    >
       <View style={styles.container}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
-        >
-          <Text style={styles.title}>Увійти</Text>
-          <TextInput
-            value={email}
-            onChangeText={emailHandler}
-            placeholder="Адреса електронної пошти"
-            style={styles.input}
-            //style={[{borderColor: color},styles.input]}
-          />
-          <TextInput
-            value={password}
-            onChangeText={passwordHandler}
-            placeholder="Пароль"
-            secureTextEntry={true}
-            style={styles.input}
-          />
+        <View style={styles.innerContainer}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS == "ios" ? "padding" : "height"}
+            >
+              <Text style={styles.title}>Увійти</Text>
+              <TextInput
+                value={email}
+                onChangeText={emailHandler}
+                placeholder="Адреса електронної пошти"
+                style={styles.input}
+                //style={[{borderColor: color},styles.input]}
+              />
+              <TextInput
+                value={password}
+                onChangeText={passwordHandler}
+                placeholder="Пароль"
+                secureTextEntry={true}
+                style={styles.input}
+              />
 
-          <Text style={styles.showPassw}>Показати</Text>
+              <Text style={styles.showPassw}>Показати</Text>
 
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Home", { email: email, password: password} )}>
-            <Text style={styles.text}>Увійти</Text>
-          </TouchableOpacity>
-          {/* <Button title={"Увійти"} color="#FF6C00" style={styles.button} onPress={onLogin} /> */}
-          <Text
-            style={styles.link}
-            onPress={() => navigation.navigate("Registration")}
-          >
-            Немає аккаунта? Зареєструватись
-          </Text>
-        </KeyboardAvoidingView>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                  navigation.navigate("Home", {
+                    email: email,
+                    password: password,
+                  })
+                }
+              >
+                <Text style={styles.text}>Увійти</Text>
+              </TouchableOpacity>
+              {/* <Button title={"Увійти"} color="#FF6C00" style={styles.button} onPress={onLogin} /> */}
+              <Text
+                style={styles.link}
+                onPress={() => navigation.navigate("Registration")}
+              >
+                Немає аккаунта? Зареєструватись
+              </Text>
+            </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
+        </View>
       </View>
-    </TouchableWithoutFeedback>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // backgroundColor: '#fff',
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#ecf0f1",
+  },
+
+  innerContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-end",
+
+    backgroundColor: "#FFFFFF",
+    maxHeight: 549,
+    marginTop: "auto",
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    width: "100%",
   },
   title: {
     fontSize: 30,
