@@ -14,7 +14,8 @@ import {
   Image,
 } from "react-native";
 
-export default function RegistrationScreen() {
+ const  RegistrationScreen = ({ navigation }) =>{
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [login, setLogin] = useState("");
@@ -23,12 +24,7 @@ export default function RegistrationScreen() {
   const passwordHandler = (text) => setPassword(text);
   const loginHandler = (text) => setLogin(text);
 
-  const onLogin = () => {
-    Alert.alert("Ваші данні", `${email} + ${password}`);
-    console.log("email:", email && "password:", password);
-  };
 
-  //const image = { uri: "https://docs.expo.dev/static/images/tutorial/splash.png" };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -60,11 +56,12 @@ export default function RegistrationScreen() {
           />
 <Text style={styles.showPassw}>Показати</Text>
 
-          <TouchableOpacity style={styles.button} onPress={onLogin}>
+          <TouchableOpacity style={styles.button} 
+          onPress={() => navigation.navigate("Home", { email: email, password: password} )}>
             <Text style={styles.text}>Зареєструватись</Text>
           </TouchableOpacity>
           {/* <Button title={"Увійти"} color="#FF6C00" style={styles.button} onPress={onLogin} /> */}
-          <Text style={styles.link}>Вже є аккаунт? Увійти</Text>
+          <Text style={styles.link} onPress={() => navigation.navigate("Login")}>Вже є аккаунт? Увійти</Text>
         </KeyboardAvoidingView>
       </View>
     </TouchableWithoutFeedback>
@@ -76,7 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
      alignItems: "center",
      justifyContent: "flex-end",
-    // backgroundColor: "#ecf0f1",
+    backgroundColor: "#ecf0f1",
     // maxHeight: 549,
      //marginTop: 263,
   },
@@ -144,3 +141,6 @@ const styles = StyleSheet.create({
 
   },
 });
+
+
+export default RegistrationScreen;
