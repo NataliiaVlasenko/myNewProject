@@ -38,6 +38,7 @@ const LoginScreen = ({ navigation }) => {
     >
       <View style={styles.container}>
         <View style={styles.innerContainer}>
+
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <KeyboardAvoidingView
               behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
 
     backgroundColor: "#FFFFFF",
-    maxHeight: 549,
+    maxHeight: 489,
     marginTop: "auto",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     height: 51,
     borderRadius: 100,
   },
-  image: {
+  backImg: {
     flex: 1,
     resizeMode: "cover",
     justifyContent: "center",

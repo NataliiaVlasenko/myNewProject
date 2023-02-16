@@ -10,7 +10,7 @@ import {
 import LoginScreen from "./Screens/LoginScreen";
 import RegistrationScreen from "./Screens/RegistrationScreen";
 import Home from "./Screens/Home";
-import PostsScreen from './Screens/PostsScreen';
+import PostsScreen from "./Screens/PostsScreen";
 
 import CreatePostsScreen from "./Screens/CreatePostsScreen";
 
@@ -38,7 +38,9 @@ const App = () => {
           options={{
             title: "Публікації",
             headerRight: () => (
-              <TouchableOpacity onPress={() => navigation.navigate("Registration")}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Registration")}
+              >
                 <View>
                   <Image
                     source={require("./img/log-out.png")}
@@ -52,17 +54,16 @@ const App = () => {
 
         <MainStack.Screen name="PostsScreen" component={PostsScreen} />
         <MainStack.Screen name="ProfileScreen" component={ProfileScreen} />
-        <MainStack.Screen name="CreatePostsScreen" component={CreatePostsScreen} />
-
+        <MainStack.Screen
+          name="CreatePostsScreen"
+          component={CreatePostsScreen}
+        />
       </MainStack.Navigator>
     </NavigationContainer>
-
-    
   );
 };
 
 const styles = StyleSheet.create({
- 
   exitIcon: {
     marginRight: 20,
   },

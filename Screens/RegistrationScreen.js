@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   showPassw: {
     position: "absolute",
     left: 263,
-    top: 180,
+    top: 298,
   },
 });
 

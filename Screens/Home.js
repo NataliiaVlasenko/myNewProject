@@ -40,7 +40,8 @@ const Home = ({ navigation, route }) => {
       }}
     >
       <Tabs.Screen name="PostsScreen" component={PostsScreen} />
-      <Tabs.Screen name="CreatePostsScreen" component={CreatePostsScreen} />
+      <Tabs.Screen name="CreatePostsScreen" component={CreatePostsScreen} options={{
+            title: "Створити публікацію"}} />
       <Tabs.Screen name="ProfileScreen" component={ProfileScreen} />
     </Tabs.Navigator>
   );
