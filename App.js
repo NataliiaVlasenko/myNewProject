@@ -15,6 +15,8 @@ import PostsScreen from "./Screens/PostsScreen";
 import CreatePostsScreen from "./Screens/CreatePostsScreen";
 
 import ProfileScreen from "./Screens/ProfileScreen";
+import MapScreen from './Screens/MapScreen';
+import CommentsScreen from './Screens/CommentsScreen';
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -51,7 +53,8 @@ const App = () => {
             ),
           }}
         />
-
+<MainStack.Screen name="MapScreen" component={MapScreen} />
+<MainStack.Screen name="CommentsScreen" component={CommentsScreen} />
         <MainStack.Screen name="PostsScreen" component={PostsScreen} />
         <MainStack.Screen name="ProfileScreen" component={ProfileScreen} />
         <MainStack.Screen

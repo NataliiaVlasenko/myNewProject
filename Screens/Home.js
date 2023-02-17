@@ -20,6 +20,7 @@ const Home = ({ navigation, route }) => {
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({
+        
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
@@ -32,12 +33,15 @@ const Home = ({ navigation, route }) => {
           }
           return <Feather name={iconName} size={size} color={color} />;
         },
+        
+               
       })}
       tabBarOptions={{
         activeTintColor: "#FF6C00",
         inactiveTintColor: "gray",
         showLabel: false,
       }}
+      
     >
       <Tabs.Screen name="PostsScreen" component={PostsScreen} />
       <Tabs.Screen name="CreatePostsScreen" component={CreatePostsScreen} options={{
