@@ -6,14 +6,14 @@ import {
   Alert,
   FlatList,
   Image,
-  
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 
 const PostsScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
 
+ 
   useEffect(() => {
     if (route.params) {
       setPosts((prevState) => [...prevState, route.params]);
@@ -21,9 +21,8 @@ const PostsScreen = ({ navigation, route }) => {
   }, [route.params]);
 
   console.log("posts", posts);
+  console.log("posts", posts);
   //console.log("location", route.location);
-
- 
 
   // const { postTitle } = route.params;
   // const { location } = route.params;
@@ -38,7 +37,6 @@ const PostsScreen = ({ navigation, route }) => {
         data={posts}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => (
-          
           <View>
             <Image source={{ uri: item.photo }} style={styles.poster} />
             <Text style={styles.postTitle}>{item.postTitle}</Text>
@@ -49,17 +47,16 @@ const PostsScreen = ({ navigation, route }) => {
                 size={24}
                 color="gray"
                 style={styles.commentIcon}
-                onPress={() => navigation.navigate("CommentsScreen",  {item})}
+                onPress={() => navigation.navigate("CommentsScreen", { item })}
               />
 
               <TouchableOpacity
                 style={styles.locationContainer}
-                onPress={() => navigation.navigate("MapScreen",  {item})}
+                onPress={() => navigation.navigate("MapScreen", { item })}
               >
                 <EvilIcons name="location" size={24} color="gray" />
                 <Text>{item.locationTitle}</Text>
               </TouchableOpacity>
-              
             </View>
           </View>
         )}

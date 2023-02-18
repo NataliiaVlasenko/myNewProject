@@ -15,14 +15,27 @@ import {
   ImageBackground,
 } from "react-native";
 
-const RegistrationScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [login, setLogin] = useState("");
+import { useDispatch } from "react-redux";
 
-  const emailHandler = (text) => setEmail(text);
-  const passwordHandler = (text) => setPassword(text);
-  const loginHandler = (text) => setLogin(text);
+import { authSignUpUser } from "../redux/auth/authOperations";
+
+
+const initialState = {
+  email: "",
+  password: "",
+  login: "",
+};
+
+const RegistrationScreen = ({ navigation }) => {
+  const [state, setstate] = useState(initialState);
+
+  const dispatch = useDispatch();
+
+  const handleSubmit = () => {
+    dispatch(authSignUpUser(state));
+  
+    setstate(initialState);
+  };
 
   return (
     <ImageBackground
@@ -41,20 +54,26 @@ const RegistrationScreen = ({ navigation }) => {
               <View>
                 <Text style={styles.title}>Реєстрація</Text>
                 <TextInput
-                  value={login}
-                  onChangeText={loginHandler}
+                  value={state.login}
+                  onChangeText={(value) =>
+                    setstate((prevState) => ({ ...prevState, login: value }))
+                  }
                   placeholder="Логін"
                   style={styles.input}
                 />
                 <TextInput
-                  value={email}
-                  onChangeText={emailHandler}
+                  value={state.email}
+                  onChangeText={(value) =>
+                    setstate((prevState) => ({ ...prevState, email: value }))
+                  }
                   placeholder="Адреса електронної пошти"
                   style={styles.input}
                 />
                 <TextInput
-                  value={password}
-                  onChangeText={passwordHandler}
+                  value={state.password}
+                  onChangeText={(value) =>
+                    setstate((prevState) => ({ ...prevState, password: value }))
+                  }
                   placeholder="Пароль"
                   secureTextEntry={true}
                   style={styles.input}
@@ -63,12 +82,12 @@ const RegistrationScreen = ({ navigation }) => {
 
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() =>
-                    navigation.navigate("Home", {
-                      email: email,
-                      password: password,
-                    })
-                  }
+                  // onPress={() =>
+                  //   navigation.navigate("Home", {
+                  //     email, password, login
+                  //   })
+                  // }
+                  onPress={handleSubmit}
                 >
                   <Text style={styles.text}>Зареєструватись</Text>
                 </TouchableOpacity>

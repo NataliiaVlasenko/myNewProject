@@ -7,6 +7,10 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
+
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+
 import LoginScreen from "./Screens/LoginScreen";
 import RegistrationScreen from "./Screens/RegistrationScreen";
 import Home from "./Screens/Home";
@@ -27,6 +31,7 @@ const App = () => {
   const exit = () => {};
 
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <MainStack.Navigator initialRouteName="Registration">
         {/* Заміна Switch */}
@@ -63,6 +68,7 @@ const App = () => {
         />
       </MainStack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 };
 

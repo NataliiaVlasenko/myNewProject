@@ -13,9 +13,12 @@ const Tabs = createBottomTabNavigator();
 const Home = ({ navigation, route }) => {
   const { email } = route.params;
   const { password } = route.params;
+  const {login} = route.params;
+
 
   // Alert.alert("Ваші данні", `${email} + ${password}`);
-  // console.log("email:", email && "password:", password)
+   console.log(route.params);
+  
 
   return (
     <Tabs.Navigator
