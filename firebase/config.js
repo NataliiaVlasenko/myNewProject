@@ -2,7 +2,7 @@
 // import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 // import { getAuth } from "firebase/auth";
 
-import firebase from "firebase/app";
+import * as firebase from "firebase/app";
 import "firebase/auth";
 
 const firebaseConfig = {
@@ -19,7 +19,6 @@ const firebaseConfig = {
 
 // Initialize Firebase Authentication and get a reference to the service
  //const auth = firebase.auth();
-
  //export { auth };
 
 export default firebase.initializeApp(firebaseConfig);
