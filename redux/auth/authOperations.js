@@ -1,6 +1,5 @@
 import db from "../../firebase/config";
 
-
 export const authSignUpUser = ({ email, password, login }) => async (
   dispatch,
   getSatte
