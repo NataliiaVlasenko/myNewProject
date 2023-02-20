@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { styles } from "./ScreensStyles/Posts_styles";
 import {
   View,
   Text,
@@ -9,32 +10,47 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
+import db from "../firebase/config";
+import { useSelector } from "react-redux";
+import { Feather } from "@expo/vector-icons";
 
 const PostsScreen = ({ navigation, route }) => {
+
+  const { login } = useSelector((state) => state.auth);
+
   const [posts, setPosts] = useState([]);
+  
+  const getAllPost = async () => {
+    await db
+      .firestore()
+      .collection("posts")
+      .onSnapshot((data) =>
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
+  };
 
- 
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
-
-  console.log("posts", posts);
-  console.log("posts", posts);
-  //console.log("location", route.location);
-
-  // const { postTitle } = route.params;
-  // const { location } = route.params;
-  // const { postPhoto } = route.params;
-
-  //Alert.alert(`${postPhoto} ,${postTitle} , ${location} `);
-  //console.log(postTitle,location, postPhoto)
+    getAllPost();
+  }, []);
 
   return (
     <View style={styles.container}>
+
+      <TouchableOpacity style={styles.innerCont} onPress={() => navigation.navigate("ProfileScreen")}>
+      <View style={styles.profileBox}>
+      <Feather name="user" size={44} color="black" />
+      </View>
+
+      <View style={styles.profileDescrBox}>
+        <Text style={styles.profileDescr}>UserLogin: {login}</Text>
+        <Text style={styles.profileDescr}>userEmail</Text>
+      </View>
+            
+      </TouchableOpacity>
+
       <FlatList
         data={posts}
+        style={styles.list}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => (
           <View>
@@ -47,12 +63,12 @@ const PostsScreen = ({ navigation, route }) => {
                 size={24}
                 color="gray"
                 style={styles.commentIcon}
-                onPress={() => navigation.navigate("CommentsScreen", { item })}
+                onPress={() => navigation.navigate("CommentsScreen", { postId: item.id, uri: item.photo })}
               />
 
               <TouchableOpacity
                 style={styles.locationContainer}
-                onPress={() => navigation.navigate("MapScreen", { item })}
+                onPress={() => navigation.navigate("MapScreen", { location: item.location })}
               >
                 <EvilIcons name="location" size={24} color="gray" />
                 <Text>{item.locationTitle}</Text>
@@ -65,44 +81,5 @@ const PostsScreen = ({ navigation, route }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    //justifyContent: "center",
-    alignItems: "center",
-  },
-  poster: {
-    width: 343,
-    height: 240,
-    borderRadius: 8,
-    marginTop: 16,
-  },
-  postTitle: {
-    marginRight: "auto",
-    fontSize: 16,
-    weight: "bold",
-  },
-
-  postDescription: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-  },
-
-  commentIcon: {
-    marginRight: "auto",
-    marginVertical: 12,
-  },
-
-  locationContainer: {
-    flex: 1,
-    flexDirection: "row",
-    marginLeft: "auto",
-    borderBottom: 1,
-
-    justifyContent: "flex-end",
-  },
-});
 
 export default PostsScreen;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -7,53 +7,65 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Alert,
-  Button,
   Text,
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
+import { styles } from "./ScreensStyles/Login_styles";
+const initialState = {
+  email: "",
+  password: "",
+};
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../redux/auth/authOperations";
 
-const LoginScreen = ({ navigation }) => {
-  // const firstColor = "#E8E8E8";
-  // const activeColor = "#FF6C00";
+const LoginScreen = ({ navigation, route}) => {
+  const [state, setstate] = useState(initialState);
+  const [user, setUser] = useState({});
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // Alert.alert("Ваші данні", `${state.email} + ${state.password}`);
+  // console.log("email:", state.email && "password:", state.password);
 
-  const emailHandler = (text) => setEmail(text);
-  const passwordHandler = (text) => setPassword(text);
+  useEffect(() => {
+    if (route.params) {
+      setUser((prevState) => [...prevState, route.params]);
+      //console.log (user);
+    }
+  }, [route.params]);
 
-  // const [color, setColor] = useState(firstColor);
+  const dispatch = useDispatch();
 
-  const onLogin = () => {
-    Alert.alert("Ваші данні", `${email} + ${password}`);
-    console.log("email:", email && "password:", password);
+  const handleSubmit = () => {
+    dispatch(authSignInUser(state));
+    setstate(initialState);    
   };
 
-  return (
+   return (
     <ImageBackground
       source={require("../img/PhotoBG.jpg")}
       style={styles.backImg}
     >
       <View style={styles.container}>
         <View style={styles.innerContainer}>
-
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <KeyboardAvoidingView
               behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
               <Text style={styles.title}>Увійти</Text>
               <TextInput
-                value={email}
-                onChangeText={emailHandler}
+                value={state.email}
+                onChangeText={(value) =>
+                  setstate((prevState) => ({ ...prevState, email: value }))
+                }
                 placeholder="Адреса електронної пошти"
                 style={styles.input}
                 //style={[{borderColor: color},styles.input]}
               />
               <TextInput
-                value={password}
-                onChangeText={passwordHandler}
+                value={state.password}
+                onChangeText={(value) =>
+                  setstate((prevState) => ({ ...prevState, password: value }))
+                }
                 placeholder="Пароль"
                 secureTextEntry={true}
                 style={styles.input}
@@ -61,15 +73,7 @@ const LoginScreen = ({ navigation }) => {
 
               <Text style={styles.showPassw}>Показати</Text>
 
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() =>
-                  navigation.navigate("Home", {
-                    email: email,
-                    password: password,
-                  })
-                }
-              >
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.text}>Увійти</Text>
               </TouchableOpacity>
               {/* <Button title={"Увійти"} color="#FF6C00" style={styles.button} onPress={onLogin} /> */}
@@ -87,70 +91,6 @@ const LoginScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // backgroundColor: '#fff',
-    alignItems: "center",
-  },
 
-  innerContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-end",
-
-    backgroundColor: "#FFFFFF",
-    maxHeight: 489,
-    marginTop: "auto",
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    width: "100%",
-  },
-  title: {
-    fontSize: 30,
-    marginBottom: 33,
-    textAlign: "center",
-  },
-  input: {
-    width: 343,
-    height: 50,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "#E8E8E8",
-    marginBottom: 10,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 8,
-    position: "relative",
-  },
-  button: {
-    backgroundColor: "#FF6C00",
-    height: 51,
-    borderRadius: 100,
-  },
-  backImg: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
-  },
-  link: {
-    fontSize: 16,
-    weight: 400,
-    marginBottom: 92,
-    marginTop: 16,
-    textAlign: "center",
-    color: " #1B4371",
-  },
-  text: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    textAlign: "center",
-    padding: 16,
-  },
-  showPassw: {
-    position: "absolute",
-    left: 263,
-    top: 148,
-  },
-});
 
 export default LoginScreen;

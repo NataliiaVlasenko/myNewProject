@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+
+import { styles } from "./ScreensStyles/CreatePost_styles";
+
 import {
   TouchableOpacity,
   View,
@@ -13,8 +16,11 @@ import {
   Dimensions,
 } from "react-native";
 import { Camera } from "expo-camera";
-import MapView, { Marker } from "react-native-maps";
+//import MapView, { Marker } from "react-native-maps";
+import { useSelector } from "react-redux";
 import * as Location from "expo-location";
+
+import db from "../firebase/config";
 
 const CreatePostScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
@@ -25,19 +31,10 @@ const CreatePostScreen = ({ navigation }) => {
   const [postTitle, setPostTitle] = useState("");
   const [locationTitle, setLocationTitle] = useState("");
 
+  const { userId, login } = useSelector((state) => state.auth);
+
   const postTitleHandler = (text) => setPostTitle(text);
   const locationHandler = (text) => setLocationTitle(text);
-
-  const takePhoto = async () => {
-    const photo = await camera.takePictureAsync();
-    //const location = await Location.getCurrentPositionAsync();
-    setPhoto(photo.uri);
-
-    
-    console.log("photo", photo);
-
-    //console.log("photo", photo);
-  };
 
   useEffect(() => {
     (async () => {
@@ -46,17 +43,17 @@ const CreatePostScreen = ({ navigation }) => {
         console.log("Permission to access location was denied");
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      const coords = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      };
-      setLocation(coords);
-      console.log("latitude", location.coords.latitude);
-    console.log("longitude", location.coords.longitude);
-
+      let locationRes = await Location.getCurrentPositionAsync({});
+      setLocation(locationRes);
     })();
   }, []);
+
+  const takePhoto = async () => {
+  
+    const { uri } = await camera.takePictureAsync();
+    setPhoto(uri);
+    
+  };
 
   const trash = () => {
     setPostTitle("");
@@ -66,9 +63,38 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   const sendPhoto = () => {
-    //console.log("navigation", navigation);
-    navigation.navigate("PostsScreen", { photo, postTitle, locationTitle , location});
+   
+    uploadPostToServer();
+    //navigation.navigate("PostsScreen", { photo, postTitle, locationTitle , location});
+    navigation.navigate("PostsScreen");
     trash();
+  };
+
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+    const createPost = await db
+      .firestore()
+      .collection("posts")
+      .add({ photo, locationTitle, userId, login, location: location.coords});
+      
+  };
+
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(photo);
+    const file = await response.blob();
+
+    const uniquePostId = Date.now().toString();
+
+    await db.storage().ref(`postImage/${uniquePostId}`).put(file);
+
+    const processedPhoto = await db
+      .storage()
+      .ref("postImage")
+      .child(uniquePostId)
+      .getDownloadURL();
+
+    //console.log("processedPhoto", processedPhoto);
+    return processedPhoto;
   };
 
   return (
@@ -132,124 +158,5 @@ const CreatePostScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    padding: 16,
-  },
-  poster: {
-    width: 343,
-    height: 240,
-    backgroundColor: "#E8E8E8",
-    borderColor: "#E8E8E8",
-    borderRadius: 8,
-    marginTop: 32,
-  },
-  label: {
-    marginRight: "auto",
-    fontSize: 16,
-    color: "#BDBDBD",
-
-    marginBottom: 28,
-  },
-  input: {
-    width: 343,
-    borderBottomWidth: 1,
-    borderColor: "#E8E8E8",
-    fontSize: 16,
-    marginBottom: 32,
-  },
-  button: {
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingLeft: 32,
-    paddingRight: 32,
-    width: 343,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 100,
-    alignItems: "center",
-  },
-  activeButton: {
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingLeft: 32,
-    paddingRight: 32,
-    width: 343,
-    backgroundColor: "#FF6C00",
-    borderRadius: 100,
-    alignItems: "center",
-  },
-
-  buttonText: {
-    fontSize: 16,
-    color: "#BDBDBD",
-  },
-
-  buttonActiveText: {
-    fontSize: 16,
-    color: "white",
-  },
-
-  inputContainer: {
-    justifyContent: "center",
-  },
-  icon: {
-    position: "absolute",
-    right: 0,
-    top: 0,
-  },
-  cameraIcon: {
-    width: 60,
-
-    position: "absolute",
-    right: 150,
-    top: 80,
-  },
-  iconContainer: {
-    position: "relative",
-    width: 343,
-    height: 240,
-  },
-
-  camera: {
-    width: 343,
-    height: 240,
-    position: "relative",
-
-    backgroundColor: "#E8E8E8",
-    borderColor: "#E8E8E8",
-    borderRadius: 20,
-  },
-  trash: {
-    width: 24,
-    marginTop: "auto",
-  },
-
-  innerContainer: {
-    flex: 1,
-    alignItems: "center",
-    //justifyContent: "flex-end",
-  },
-  takePhotoContainer: {
-    position: "relative",
-    borderColor: "red",
-    width: 343,
-    height: 240,
-    borderRadius: 20,
-    // top: 50,
-    // left: 10,
-    // borderColor: "#fff",
-    // borderWidth: 1,
-  },
-  postPhoto: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    borderRadius: 20,
-  },
-});
 
 export default CreatePostScreen;

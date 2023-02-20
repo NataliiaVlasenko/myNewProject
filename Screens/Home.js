@@ -11,19 +11,13 @@ import { Feather } from "@expo/vector-icons";
 const Tabs = createBottomTabNavigator();
 
 const Home = ({ navigation, route }) => {
-  const { email } = route.params;
-  const { password } = route.params;
-  const {login} = route.params;
-
-
+ 
   // Alert.alert("Ваші данні", `${email} + ${password}`);
-   console.log(route.params);
-  
+  //console.log(route.params);
 
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({
-        
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
@@ -36,33 +30,28 @@ const Home = ({ navigation, route }) => {
           }
           return <Feather name={iconName} size={size} color={color} />;
         },
-        
-               
       })}
       tabBarOptions={{
         activeTintColor: "#FF6C00",
         inactiveTintColor: "gray",
         showLabel: false,
       }}
-      
     >
       <Tabs.Screen name="PostsScreen" component={PostsScreen} />
-      <Tabs.Screen name="CreatePostsScreen" component={CreatePostsScreen} options={{
-            title: "Створити публікацію"}} />
+      <Tabs.Screen
+        name="CreatePostsScreen"
+        component={CreatePostsScreen}
+        options={{
+          title: "Створити публікацію",
+        }}
+      />
       <Tabs.Screen name="ProfileScreen" component={ProfileScreen} />
     </Tabs.Navigator>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    //flex: 1,
-    //alignItems: "center",
-    //justifyContent: "center",
-  },
-  exitIcon: {},
-
-  headerContainer: {
+   headerContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",

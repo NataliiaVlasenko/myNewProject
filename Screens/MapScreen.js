@@ -1,45 +1,39 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions} from "react-native";
-
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-const MapScreen = ({navigation, route }) => {
+
+const MapScreen = ({ route }) => {
+  console.log("route.params.location", route.params.location);
+  const { longitude, latitude } = route.params.location;
   
-    return (
-    
-    <View style={styles.container}>
+  if(!route.params.location) {
+    Alert.alert("There`s no location point here! Try another post!");
+    return;
+  
+  }
+
+  return (
+
+        <View style={styles.container}>
       <MapView
-        style={styles.mapStyle}
-        region={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+        style={{ flex: 1 }}
+        initialRegion={{
+          latitude,
+          longitude,
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.006,
         }}
-        mapType="standard"
-        minZoomLevel = {15}
-        onMapReady={() => console.log("Map is ready")}
-        onRegionChange={() => console.log("Region change")}
       >
-        <Marker
-          title="Photo Place"
-          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
-          
-        />
+        <Marker coordinate={{ latitude, longitude }} title="travel photo" />
       </MapView>
     </View>
-  )
+  );
 };
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  mapStyle: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
   },
 });
 
